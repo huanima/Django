@@ -35,6 +35,12 @@ def dispatcher(request):
     else:
         return JsonResponse({'ret': 1, 'msg': '不支持该类型的http请求'})
 
+
+
+
+
+
+
 # 处理get的函数（获取）
 def listCustomers(request):
     # 获得common.models的Customer的所有数据
@@ -43,6 +49,10 @@ def listCustomers(request):
     retlist = list(qs)
     # 补全剩余部分，JsonResponses是用Json格式输出，ret=0代表成功
     return JsonResponse({'ret': 0, 'retlist': retlist})
+
+
+
+
 
 
 
@@ -70,6 +80,11 @@ def addCustomers(request):
     return JsonResponse({'ret': 0, 'id': record.id})
 
 
+
+
+
+
+
 # 例子2：在例子1中增加 id = 2 之类的
 # 处理修改的函数
 def modifyCustomers(request):
@@ -78,31 +93,51 @@ def modifyCustomers(request):
     newData = request.params['newData']
 
     try:
-        # 获取修改前数据
+        # 根据id，获取修改前数据
         customer = Customer.objects.get(id=customerId)
 
     # 如果没有Customer这个类
     except Customer.DoesNotExist:
         return {
             'ret': 1,
+            # 给前端一个信息 没有数据
             'msg':f'id为`{customerId}`的客户不存在'
         }
 
-    # 如果修改内容有name
+    # 查看所有信息里哪些需要修改
     if 'name' in newData:
         customer.name = newData['name']
     if 'phoneNumber' in newData:
         customer.phoneNumber = newData['phoneNumber']
-    if 'adress' in newData:
-        customer.address = newData['adress']
+    if 'address' in newData:
+        customer.address = newData['address']
 
     # 保存customer
     customer.save()
 
-    return JsonResponse({'ret'=0})
+    return JsonResponse({'ret': 0})
 
 
 
+
+
+
+# 删除数据
+def deleteCustomers(request):
+
+    customerID = request.params['id']
+
+    try:
+        customer = Customer.objects.get(id=customerID)
+    except Customer.DoesNotExist:
+        return {
+            'ret':1,
+            'msg':f'id为`{customerID}的客户不存在`'
+        }
+
+    customer.delete()
+
+    return JsonResponse({'ret': 0})
 
 
 
