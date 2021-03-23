@@ -27,16 +27,16 @@ def dispatcher(request):
         # 对于get，？后面有 action = list_customer
         return listCustomers(request)
     elif action == 'add_customer':
-        return addCustomer(request)
+        return addCustomers(request)
     elif action == 'modify_customer':
         return modifyCustomers(request)
     elif action == 'delete_customer':
-        return deleteCustomer(request)
+        return deleteCustomers(request)
     else:
         return JsonResponse({'ret': 1, 'msg': '不支持该类型的http请求'})
 
 # 处理get的函数（获取）
-def listCustomer(request):
+def listCustomers(request):
     # 获得common.models的Customer的所有数据
     qs = Customer.objects.values()
     # 把qs的格式转化为list
@@ -46,22 +46,77 @@ def listCustomer(request):
 
 
 
-# 举例：前端向后端添加的用户信息
+# 例子1：前端向后端添加的用户信息
 # {
 #     "action":"add_customer",
 #     "data":{
 #         "name":"小尿泡",
-#         "phoneNumeber":"133",
+#         "phoneNumber":"133",
 #         "address":"133"
 #     }
 # }
 
 # 处理post的函数（添加）
-def addcustomer(request):
-    # request.params里已经包含前端给后端的数据了，data是数据所在的key（人定义的名字啦）
+def addCustomers(request):
+    # request.params里已经包含前端给后端的数据了，现在request.params是字典格式，data是数据所在的key（人定义的名字啦）
     info = request.params['data']
-    Customer.objects.create(name=info['name'],
+
+    # record（也就是create的返回值）是新添加的这一行
+    record = Customer.objects.create(name=info['name'],
                             phoneNumber=info['phoneNumber'],
-                            address=info[]'address')
-    return JsonResponse({'ret':0})
+                            address=info['address'])
+
+    # record.id是添加这一行的序号，返回给前端
+    return JsonResponse({'ret': 0, 'id': record.id})
+
+
+# 例子2：在例子1中增加 id = 2 之类的
+# 处理修改的函数
+def modifyCustomers(request):
+    customerId = request.params['id']
+    # newDate是字典
+    newData = request.params['newData']
+
+    try:
+        # 获取修改前数据
+        customer = Customer.objects.get(id=customerId)
+
+    # 如果没有Customer这个类
+    except Customer.DoesNotExist:
+        return {
+            'ret': 1,
+            'msg':f'id为`{customerId}`的客户不存在'
+        }
+
+    # 如果修改内容有name
+    if 'name' in newData:
+        customer.name = newData['name']
+    if 'phoneNumber' in newData:
+        customer.phoneNumber = newData['phoneNumber']
+    if 'adress' in newData:
+        customer.address = newData['adress']
+
+    # 保存customer
+    customer.save()
+
+    return JsonResponse({'ret'=0})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

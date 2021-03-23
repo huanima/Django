@@ -13,7 +13,8 @@ def listcustomers(request):
     qs = Customer.objects.values()
 
     # 根据request筛选
-    ph = request.GET.get('phoneNumber',None)        #GET是把？后整个取出来，get是把''的部分取出，例如'phoneNumber=1234567'
+    # GET是把？后整个取出来，get是把''的部分除表头部分取出来，例如对于？phoneNumber=1234567，输出的是 ph = 1234567
+    ph = request.GET.get('phoneNumber',None)
     if ph:
         qs = qs.filter(phoneNumber=ph)
 
