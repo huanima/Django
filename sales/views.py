@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 
+#这讲的是 把客户信息 通过电话条件筛选 并输出这一行（是一种没区分前后端的处理）
+
 from django.http import HttpResponse
 from common.models import Customer
 

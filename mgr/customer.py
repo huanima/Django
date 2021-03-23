@@ -1,5 +1,9 @@
 from django.http import JsonResponse
 import json
+from common.models import Customer
+
+
+# 这里讲的是 前端对manager的四个操作用同一个路由，如何分流和增删改查
 
 
 # 定义一个区分方法的函数
@@ -30,5 +34,16 @@ def dispatcher(request):
         return deleteCustomer(request)
     else:
         return JsonResponse({'ret': 1, 'msg': '不支持该类型的http请求'})
+
+# 处理get的函数（获取）
+def listCustomer(request):
+    # 获得common.models的Customer的所有数据
+    qs = Customer.objects.values()
+    # 把qs的格式转化为list
+    retlist = list(qs)
+    # 补全剩余部分，JsonResponses是用Json格式输出，ret=0代表有数据传出
+    return JsonResponse({'ret': 0, 'retlist': retlist})
+
+# 处理post的函数（添加）
 
 
