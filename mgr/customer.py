@@ -16,6 +16,7 @@ def dispatcher(request):
         request.params = json.loads(request.body)
 
 
+
 # 根据不同方法派发不同函数处理
     # action是前端给后端信息中的一个参数，以表示方法
     action = request.params['action']
