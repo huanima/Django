@@ -1,11 +1,16 @@
-import requests,pprint
+import requests
+import pprint
+
+
 
 payload = {
-    'userName': 'huanima',
+    'username': 'huanima',
     'password': 'Hejingyi'
 }
 
-response = requests.post('http://localhost/api/mgr/signin',
+response = requests.post('http://127.0.0.1/api/mgr/signin',
                          data=payload)
 
-pprint.pprint((response.json()))
+# print(response)
+pprint.pprint(response.json())
+# pprint.pprint(response.json().decode())
