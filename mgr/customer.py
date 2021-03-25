@@ -6,9 +6,30 @@ from common.models import Customer
 # 这里讲的是 前端对manager的四个操作用同一个路由，如何分流和增删改查（区分前后端）
 
 
+# 1.把校验管理员，放在区分方法的函数里！
 # 定义一个区分方法的函数
 def dispatcher(request):
-# if部分用来区分前端给后端的数据类型（一个信号 / 带着数据的），最终格式都是字典格式
+    if 'usertyle' not in request.session:
+        return JsonResponse({
+            'ret': 302,
+            'msg': '未登录',
+            'redirect':'/mgr/sign.html'},
+        status = 302)
+
+    if request.session['usertype'] != 'mgr':
+        return JsonResponse({
+            'ret': 302,
+            'msg': '用户非mgr类型',
+            'redirect': '/mgr/sign.html'},
+        status = 302)
+
+
+
+
+
+
+
+# 2.if部分用来区分前端给后端的数据类型（一个信号 / 带着数据的），最终格式都是字典格式
 
     # 如果GET，就把？后面的参数给params（GET是前端向后端要数据，给一个信号向后端要数据）
     if request.method == 'GET':
