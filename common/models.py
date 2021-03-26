@@ -52,9 +52,6 @@ class OrderMedicine(models.Model):
 
 
 
-
-
-
 # 一对一（客户和客户地址）
 class ContactAddress(models.Model):
     # OneToOneField  一对一
@@ -67,6 +64,19 @@ class ContactAddress(models.Model):
 
 
 
+
+
+# 关于ORM
+
+# 国家表
+class Country(models.Model):
+    name = models.CharField(max_length=200)
+
+# 学生表，country是国家表的外键，形成一对多关系
+class student(models.Model):
+    name = models.CharField(max_length=200)
+    grade = models.PositiveSmallIntegerField()
+    country = models.ForeignKey(Country, on_delete=models.PROTECT)
 
 
 
