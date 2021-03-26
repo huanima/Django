@@ -63,9 +63,6 @@ class ContactAddress(models.Model):
 
 
 
-
-
-
 # 关于ORM
 
 # 国家表
