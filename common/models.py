@@ -61,6 +61,12 @@ class ContactAddress(models.Model):
 
 
 
+# 如果要访问Order中的某个订单customer的名字（例如这个订单的叫Order1:
+# Order1.customer.name
+# 因为Order1.customer相当于Customer里的一个对象，.name就相当于 .属性
+
+
+
 
 
 # 关于ORM
@@ -70,21 +76,42 @@ class Country(models.Model):
     name = models.CharField(max_length=200)
 
 # 学生表，country是国家表的外键，形成一对多关系
-class student(models.Model):
+class Student(models.Model):
     name = models.CharField(max_length=200)
     grade = models.PositiveSmallIntegerField()
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
 
+# ？ 1.1.如果要访问Student中的某个学生的国家（例如这个学生是 s1:
+# s1.country.name
+# 因为s1.country相当于Country里的一个对象，.name就相当于 .属性
+
+# ？ 1.2.搜索表中所以一年级的学生
+# Student.objects.filter(grade=1).value()
+
+# ？ 1.3.如果想筛选所有一年级中国的学生
+# X错！       Student.objects.filter(grade=1，country='中国').value()
+# 一般的方法：  cn = Country.objects.get(name='中国')
+#            Student.objects.filter(grade=1,country_id=cn.id).value()
+# √对！       Student.objects.filter(grade=1，country__name='中国').value()
+
+# ？ 1.4.如果筛选筛选所有一年级中国的学生，并仅输出姓名和国家
+# √对！ Student.objects.filter(grade=1，country__name='中国').value('name','country__name')
+
+# ？ 1.5.country__name这种命名很不适合前后端交接，如果想要改名字可以：
+# from django.db.models import F
+# Student.objects.annotate(
+#     countryname = F('country__name'),
+#     studentname = F('name')
+#     )\
+#     .filter(grade=1,countryname='中国').value('studentname','countryname')
 
 
-
-
-
-
-
-
-
-
+# ？ 2.1.反向，输出所有中国学生
+# cn = Country.objects.get(name='中国')
+# cn.student_set.all()
+#   这样输出结果是对象！
+#   [<Student>:Student object(1),<Student>:Student object(2)]
+# 所以    cn.student_set.all()[0].name    就能输出 第一个对象的name
 
 
 
