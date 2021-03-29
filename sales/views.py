@@ -18,6 +18,7 @@ def listcustomers(request):
     if ph:
         qs = qs.filter(phoneNumber=ph)
 
+
     # 输出格式
     resStr = ''
     for customer in qs:

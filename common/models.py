@@ -109,9 +109,27 @@ class Student(models.Model):
 # ？ 2.1.反向，输出所有中国学生
 # cn = Country.objects.get(name='中国')
 # cn.student_set.all()
-#   这样输出结果是对象！
-#   [<Student>:Student object(1),<Student>:Student object(2)]
-# 所以    cn.student_set.all()[0].name    就能输出 第一个对象的name
+#     这样输出结果是对象！
+#     [<Student>:Student object(1),<Student>:Student object(2)]
+# 所以 cn.student_set.all()[0].name    就能输出 第一个对象的name
+
+# ？ 2.2.定义反向关联名
+# 在定义类的时候
+# class Student(models.Model):
+#     name = models.CharField(max_length=200)
+#     grade = models.PositiveSmallIntegerField()
+#     country = models.ForeignKey(Country, on_delete=models.PROTECT,related_name='students')
+# 那么2.1.的问题可以如下
+# cn = Country.objects.get(name='中国')
+# cn.students.all()
 
 
-
+# ？ 2.3.所有一年级学生 的国家名字
+# 一般的方法：先找到所有一年级学生的国家id。values_list 以list输出，flat=True 不是键值对的输出，只输出值
+#     country_ids = Student.objects.filter(grade=1).values_list('country',flat=True)
+#     id__in=  在这个列表的id
+#     Country.objects.filter(id__in=country_ids).value()
+# √   链接到另一个表里就要表名全小写。distinct()去重，据说distinct()对MySQL数据库无效
+#     Country.objects.filter(student__grade=1).value()distinct()
+# 注：如果定义了反向关联名，用反向关联名啊
+#     Country.objects.filter(students__grade=1).value()distinct()
