@@ -81,6 +81,7 @@ class Student(models.Model):
     grade = models.PositiveSmallIntegerField()
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
 
+
 # ？ 1.1.如果要访问Student中的某个学生的国家（例如这个学生是 s1:
 # s1.country.name
 # 因为s1.country相当于Country里的一个对象，.name就相当于 .属性
