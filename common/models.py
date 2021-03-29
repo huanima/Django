@@ -41,14 +41,14 @@ class Order(models.Model):
     # 不会显示在数据库表格中！
     medicines = models.ManyToManyField(Medicine,through='OrderMedicine')
 
+
+
 # 继续多对多
 class OrderMedicine(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     medicine = models.ForeignKey(Medicine,on_delete=models.PROTECT)
     #每个药品数量
     amount = models.PositiveIntegerField()
-
-
 
 
 
@@ -64,6 +64,11 @@ class ContactAddress(models.Model):
 # 如果要访问Order中的某个订单customer的名字（例如这个订单的叫Order1:
 # Order1.customer.name
 # 因为Order1.customer相当于Customer里的一个对象，.name就相当于 .属性
+
+
+
+
+
 
 
 
@@ -123,7 +128,6 @@ class Student(models.Model):
 # 那么2.1.的问题可以如下
 # cn = Country.objects.get(name='中国')
 # cn.students.all()
-
 
 # ？ 2.3.所有一年级学生 的国家名字
 # 一般的方法：先找到所有一年级学生的国家id。values_list 以list输出，flat=True 不是键值对的输出，只输出值
